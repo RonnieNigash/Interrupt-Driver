@@ -1,5 +1,5 @@
 all:
-	make -C short
+	make -C interrupt-driver
 
 clean: 
-	make -C short clean
+	make -C interrupt-driver clean
