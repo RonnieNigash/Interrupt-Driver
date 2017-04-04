@@ -1,5 +1,8 @@
-all:
-	make -C interrupt-driver
+obj-m += max3107.o
 
-clean: 
-	make -C interrupt-driver clean
+all:
+	make -C /lib/modules/$(uname -r)/build M=$(PWD) modules
+
+clean:
+	make -C /lib/modules/$(uname -r)/build M=$(PWD) modules
+
