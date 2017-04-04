@@ -1,6 +1,7 @@
 #include <linux/module.h>
 #include <linux/kernel.h> // KERN_ALERT
 #include <linux/init.h> // __init, __exit macros
+#include "max3107.h"
 
 // Global variables
 static int loopback = 0;
