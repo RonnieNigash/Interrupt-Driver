@@ -38,9 +38,9 @@ module_init(max3107_init);
 
 static void __exit max3107_exit(void)
 {
-	printk( KERN_ALERT "%s: Unregistering device with %d\n", __FUNCTION__, major);
+	i2c_del_driver(&max3107_i2c_uart_driver);
 
-	// @TODO: unregister driver
+	uart_unregister_driver(&max3107_uart);
 }
 module_exit(max3107_exit);
 
