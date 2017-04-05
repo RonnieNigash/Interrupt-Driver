@@ -1,5 +1,51 @@
 #ifndef _MAX3107_H
 #define _MAX3107_H
+
+/* Custom prototypes and structs */
+struct _3107_group;
+
+struct _3107_data {
+	char* name;
+	struct _3107_group* group;
+	int present;
+	unsigned short address;
+	int index;
+	struct i2c_client i2cClient;
+	int active;
+
+	unsigned dtrGPIO, dsrGPIO, carGPIO, rngGPIO;
+
+	struct uart_port uartPort;
+	int uartclk;
+	unsigned interrupts;
+
+	struct work_struct worker;
+
+	struct semaphore sem;
+};
+
+struct _3107_group {
+	int i2cBus;
+	int irqLine, irqBitMask, irqHandlerInstalled;
+
+	unsigned interrupts;
+	struct uart_driver uartDriver;
+
+	int uartDriverRegistered;
+
+	unsigned portCount;
+
+	struct _3107_data ports[4];
+	struct _3107_data* interruptHistory[4];
+	struct work_struct interruptWorker;
+};
+
+extern struct _3107_group groups[];
+extern struct workqueue_struct* wq;
+extern struct i2c_driver _3107_i2c_driver;
+extern struct uart_ops max3107_uart_ops;
+
+
 /* MAX3107 register definitions */
 #define MAX3107_RHR_REG			(0x00) /* RX FIFO */
 #define MAX3107_THR_REG			(0x00) /* TX FIFO */
