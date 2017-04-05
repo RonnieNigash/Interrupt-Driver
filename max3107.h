@@ -2,11 +2,11 @@
 #define _MAX3107_H
 
 /* Custom prototypes and structs */
-struct _3107_group;
+struct max3107_group;
 
-struct _3107_data {
+struct max3107_data {
 	char* name;
-	struct _3107_group* group;
+	struct max3107_group* group;
 	int present;
 	unsigned short address;
 	int index;
@@ -24,7 +24,7 @@ struct _3107_data {
 	struct semaphore sem;
 };
 
-struct _3107_group {
+struct max3107_group {
 	int i2cBus;
 	int irqLine, irqBitMask, irqHandlerInstalled;
 
@@ -35,16 +35,14 @@ struct _3107_group {
 
 	unsigned portCount;
 
-	struct _3107_data ports[4];
-	struct _3107_data* interruptHistory[4];
+	struct max3107_data ports[4];
+	struct max3107_data* interruptHistory[4];
 	struct work_struct interruptWorker;
 };
 
-extern struct _3107_group groups[];
+extern struct max3107_group groups[];
 extern struct workqueue_struct* wq;
-extern struct i2c_driver 3107_i2c_driver;
 extern struct uart_ops max3107_uart_ops;
-
 
 /* MAX3107 register definitions */
 #define MAX3107_RHR_REG			(0x00) /* RX FIFO */
