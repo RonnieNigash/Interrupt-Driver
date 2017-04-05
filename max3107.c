@@ -16,6 +16,15 @@ static void __init max3107_register_init(struct max3107_port *s)
 
 }
 
+static struct i2c_driver max3107_uart_driver = {
+	.driver = {
+		.name	= "max3107",
+	},
+	.probe		= max3107_probe,
+	.remove		= max3107_remove,
+	.id_table	= max3107_id_table,
+};
+
 static int __init max3107_init(void)
 {
 	int registered;
@@ -26,7 +35,7 @@ static int __init max3107_init(void)
 		return registered;
 	}
 
-	registered = i2c_add_driver(&max3107_i2c_uart_driver);
+	registered = i2c_add_driver(&max3107_uart_driver);
 	if (registered < 0) {
 		printk(KERN_ALERT "Failed to initalize max3107 uart i2c : %d\n", registered);
 		return registered;
@@ -38,7 +47,7 @@ module_init(max3107_init);
 
 static void __exit max3107_exit(void)
 {
-	i2c_del_driver(&max3107_i2c_uart_driver);
+	i2c_del_driver(&max3107_uart_driver);
 
 	uart_unregister_driver(&max3107_uart);
 }

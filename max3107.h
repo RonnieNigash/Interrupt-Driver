@@ -42,7 +42,7 @@ struct _3107_group {
 
 extern struct _3107_group groups[];
 extern struct workqueue_struct* wq;
-extern struct i2c_driver _3107_i2c_driver;
+extern struct i2c_driver 3107_i2c_driver;
 extern struct uart_ops max3107_uart_ops;
 
 
