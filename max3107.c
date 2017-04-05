@@ -16,6 +16,25 @@ static void __init max3107_register_init(struct max3107_port *s)
 
 }
 
+static struct max310x_devtype {
+	char name[9];	
+	int nr;
+	int (*detect)(struct device *);
+	void (*power)(struct uart_port *, int);
+}
+
+static const struct max310x_devtype max3107_devtype = {
+	.name 	= "MAX3107",
+	.nr	= 1,
+	.detect = max3107_detect,
+	.power	= max3107_power,
+};
+
+static const struct i2c_device_id max3107_id_table[] = {
+	{ "max3107", (kernel_ulong_t)&max3107_devtype, }
+};
+MODULE_DEVICE_TABLE(i2c, max3107_id_table);
+
 static struct i2c_driver max3107_uart_driver = {
 	.driver = {
 		.name	= "max3107",
