@@ -16,30 +16,60 @@ static void __init max3107_register_init(struct max3107_port *s)
 
 }
 
+static struct max310x_devtype {
+	char name[9];	
+	int nr;
+	int (*detect)(struct device *);
+	void (*power)(struct uart_port *, int);
+}
+
+static const struct max310x_devtype max3107_devtype = {
+	.name 	= "MAX3107",
+	.nr	= 1,
+	.detect = max3107_detect,
+	.power	= max3107_power,
+};
+
+static const struct i2c_device_id max3107_id_table[] = {
+	{ "max3107", (kernel_ulong_t)&max3107_devtype, }
+};
+MODULE_DEVICE_TABLE(i2c, max3107_id_table);
+
+static struct i2c_driver max3107_uart_driver = {
+	.driver = {
+		.name	= "max3107",
+	},
+	.probe		= max3107_probe,
+	.remove		= max3107_remove,
+	.id_table	= max3107_id_table,
+};
+
 static int __init max3107_init(void)
 {
-	int major = register_chrdev(0, THIS_MODULE, &operations);
+	int registered;
 
-	printk( KERN_ALERT "%s: Registering device with %d\n", __FUNCTION__, major);
-	if ( major < 0 ) {
-		printk( KERN_ALERT "%s: Registering device failed with %d\n", __FUNCTION__, major);
-		return major;
+	registered = uart_register_driver(&max3107_uart);
+	if (registered) {
+		prink(KERN_ALERT "Registering MAX3107 Driver failed\n");
+		return registered;
 	}
 
-	// loop across uarts in group
-	// 	init registers
-	
-	return 0;
+	registered = i2c_add_driver(&max3107_uart_driver);
+	if (registered < 0) {
+		printk(KERN_ALERT "Failed to initalize max3107 uart i2c : %d\n", registered);
+		return registered;
+	}
+
+	return registered;
 }
+module_init(max3107_init);
 
 static void __exit max3107_exit(void)
 {
-	printk( KERN_ALERT "%s: Unregistering device with %d\n", __FUNCTION__, major);
+	i2c_del_driver(&max3107_uart_driver);
 
-	// @TODO: unregister driver
+	uart_unregister_driver(&max3107_uart);
 }
-
-module_init(max3107_init);
 module_exit(max3107_exit);
 
 MODULE_DESCRIPTION("MAX3107 Driver");
