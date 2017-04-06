@@ -17,6 +17,11 @@ static void __init max3107_register_init(struct max3107_port *s)
 
 }
 
+static int max3107_power(struct device *dev)
+{
+	// i2c write to the registry bits to enable power on	
+}
+
 static int max3107_detect(struct device *dev)
 {
 	struct uart_port *up = dev_get_drvdata(dev);
