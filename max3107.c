@@ -1,6 +1,7 @@
 #include <linux/module.h>
 #include <linux/kernel.h> // KERN_ALERT
 #include <linux/init.h> // __init, __exit macros
+#include <linux/device.h>
 #include "max3107.h"
 
 // Global variables
@@ -16,18 +17,28 @@ static void __init max3107_register_init(struct max3107_port *s)
 
 }
 
-static struct max310x_devtype {
-	char name[9];	
-	int nr;
-	int (*detect)(struct device *);
-	void (*power)(struct uart_port *, int);
+static int max3107_detect(struct device *dev)
+{
+	struct uart_port *up = dev_get_drvdata(dev);
+	unsigned int value = 0;
+	int registered;
+
+	registered = regmap_read(s->regmap, MAX3107_REVID_REG, &value);
+	if (registered)
+		return registered;
+
+	if ( ( (value & MAX3107_REV_MASK) != (MAX3107_REV_ID) ) ) {
+		printk(KERN_ERR "%s: ID 0x%02x does not match\n", __FUNCTION__, up->devtype->name, value)
+	}
+
+	return 0;
 }
 
-static const struct max310x_devtype max3107_devtype = {
-	.name 	= "MAX3107",
-	.nr	= 1,
-	.detect = max3107_detect,
-	.power	= max3107_power,
+static const struct max3107_devtype = {
+	char name[9] 				= "MAX3107",
+	int nr					= 1,
+	int (*detect)(struct device *) 		= max3107_detect,
+	void (*power)(struct uart_port *, int)	= max3107_power,
 };
 
 static const struct i2c_device_id max3107_id_table[] = {
