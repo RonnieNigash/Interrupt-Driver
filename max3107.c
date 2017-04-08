@@ -14,7 +14,12 @@ MODULE_PARAM_DESC(loopback, "Set to 1 to enable loopback (connect rx and tx) on 
 
 static void __init max3107_register_init(struct max3107_port *s)
 {
-
+	// disable Tx and Rx
+	// Disable interrupt bit
+	// Clear Fifos
+	// Read Clear on Reads
+	// Enable Hardware Flow Control
+	// END Clear Fifos
 }
 
 static int max3107_power(struct device *dev)
