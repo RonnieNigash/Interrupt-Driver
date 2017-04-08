@@ -35,6 +35,14 @@ static int max3107_probe(struct i2c_dev *cp, struct max3107_data *data)
 
 	port->data = data;
 
+	// Setup i2c for rx and tx
+	// take the spinlock
+	// initialize the i2c bus using the i2c group
+	//
+	// Disable interrupts
+	// Configure clock source
+	// Initialize the virtual port data to keep track of physical nvram
+	// release lock
 }
 
 static int max3107_power(struct device *dev)
