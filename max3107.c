@@ -22,6 +22,21 @@ static void __init max3107_register_init(struct max3107_port *s)
 	// END Clear Fifos
 }
 
+static int max3107_probe(struct i2c_dev *cp, struct max3107_data *data)
+{
+	struct max3107_port *port;
+	int return_val;
+
+	port = kzalloc(sizeof(*port), GFP_KERNEL);
+	if (!port) {
+		printk(KERN_ERR "%s: Allocating port struct failure\n", __FUNCTION__);
+		return -ENOMEM;
+	}
+
+	port->data = data;
+
+}
+
 static int max3107_power(struct device *dev)
 {
 	// i2c write to the registry bits to enable power on	
