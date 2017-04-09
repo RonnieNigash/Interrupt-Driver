@@ -15,15 +15,19 @@ MODULE_PARAM_DESC(loopback, "Set to 1 to enable loopback (connect rx and tx) on 
 static void __init max3107_register_init(struct max3107_port *s)
 {
 
-	s->baud = 9600; // configure baud rate
+	// Configure Baud Rate
+	s->baud = 9600;
 	//I2Cdev.writeBit( device address, register address, bit number, data );
-	
-	s->lcr_reg = MAX3107_LCR_WORD_LEN_8; // Configure LCR Register to be 8N1
+
+	// Configure LCR Register to be 8N1
+	s->lcr_reg = MAX3107_LCR_WORD_LEN_8;
 	//I2Cdev.writeBit( device address, register address, bit number, data );
 	
 	s->mode1_reg = 0;
-	s->mode1_reg |= MAX3107_MODE1_IRQSEL_BIT; // enable interrupt bit
-	s->mode1_reg |= MAX3107_MODE1_TXDIS_BIT; // disable tx
+	// Enable Interrupt Bit
+	s->mode1_reg |= MAX3107_MODE1_IRQSEL_BIT;
+	// Disable TX
+	s->mode1_reg |= MAX3107_MODE1_TXDIS_BIT;
 	s->tx_enabled = 0;
 	s->rx_enabled = 1;
 	//I2Cdev.writeBit( device address, register address, bit number, data );
@@ -33,11 +37,14 @@ static void __init max3107_register_init(struct max3107_port *s)
 	if (loopback) {
 		s->mode2_reg |= MAX3107_MODE2_LOOPBACK_BIT;
 	}
-
-	s->mode2_reg |= MAX3107_MODE2_FIFORST_BIT; // reset FIFOs
+	// Reset FIFOs
+	s->mode2_reg |= MAX3107_MODE2_FIFORST_BIT;
 	s->tx_fifo_empty = 1;
-
+	//I2Cdev.writeBit( device address, register address, bit number, data );
+	
 	// Read Clear on Reads
+	//I2Cdev.readBit( device address, register address, bit number, data );
+
 	// Enable Hardware Flow Control
 	// END Clear Fifos
 }
