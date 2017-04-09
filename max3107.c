@@ -14,8 +14,20 @@ MODULE_PARAM_DESC(loopback, "Set to 1 to enable loopback (connect rx and tx) on 
 
 static void __init max3107_register_init(struct max3107_port *s)
 {
-	// disable Tx and Rx
-	// Disable interrupt bit
+
+	s->baud = 9600; // configure baud rate
+	//I2Cdev.writeBit( device address, register address, bit number, data );
+	
+	s->lcr_reg = MAX3107_LCR_WORD_LEN_8; // Configure LCR Register to be 8N1
+	//I2Cdev.writeBit( device address, register address, bit number, data );
+	
+	s->mode1_reg = 0;
+	s->mode1_reg |= MAX3107_MODE1_IRQSEL_BIT; // enable interrupt bit
+	s->mode1_reg |= MAX3107_MODE1_TXDIS_BIT; // disable tx
+	s->tx_enabled = 0;
+	s->rx_enabled = 1;
+	//I2Cdev.writeBit( device address, register address, bit number, data );
+	
 	// Clear Fifos
 	// Read Clear on Reads
 	// Enable Hardware Flow Control
