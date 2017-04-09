@@ -45,7 +45,18 @@ static void __init max3107_register_init(struct max3107_port *s)
 	// Read Clear on Reads
 	//I2Cdev.readBit( device address, register address, bit number, data );
 
+	// Configure flow control levels
+	
 	// Enable Hardware Flow Control
+	
+	// Configure RX Timeout Register
+	
+	// Configure LSR interrupt enable
+	
+	// Clear IRQ Status with a Read (Clear on Read register)
+	
+	// Configure interrupt enable register
+
 	// END Clear Fifos
 }
 
