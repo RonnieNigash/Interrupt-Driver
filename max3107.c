@@ -14,11 +14,49 @@ MODULE_PARAM_DESC(loopback, "Set to 1 to enable loopback (connect rx and tx) on 
 
 static void __init max3107_register_init(struct max3107_port *s)
 {
-	// disable Tx and Rx
-	// Disable interrupt bit
-	// Clear Fifos
+
+	// Configure Baud Rate
+	s->baud = 9600;
+	//I2Cdev.writeBit( device address, register address, bit number, data );
+
+	// Configure LCR Register to be 8N1
+	s->lcr_reg = MAX3107_LCR_WORD_LEN_8;
+	//I2Cdev.writeBit( device address, register address, bit number, data );
+	
+	s->mode1_reg = 0;
+	// Enable Interrupt Bit
+	s->mode1_reg |= MAX3107_MODE1_IRQSEL_BIT;
+	// Disable TX
+	s->mode1_reg |= MAX3107_MODE1_TXDIS_BIT;
+	s->tx_enabled = 0;
+	s->rx_enabled = 1;
+	//I2Cdev.writeBit( device address, register address, bit number, data );
+	
+	s->mode2_reg |= MAX3107_WRITE_BIT;
+	//I2Cdev.writeBit( device address, register address, bit number, data );
+	if (loopback) {
+		s->mode2_reg |= MAX3107_MODE2_LOOPBACK_BIT;
+	}
+	// Reset FIFOs
+	s->mode2_reg |= MAX3107_MODE2_FIFORST_BIT;
+	s->tx_fifo_empty = 1;
+	//I2Cdev.writeBit( device address, register address, bit number, data );
+	
 	// Read Clear on Reads
+	//I2Cdev.readBit( device address, register address, bit number, data );
+
+	// Configure flow control levels
+	
 	// Enable Hardware Flow Control
+	
+	// Configure RX Timeout Register
+	
+	// Configure LSR interrupt enable
+	
+	// Clear IRQ Status with a Read (Clear on Read register)
+	
+	// Configure interrupt enable register
+
 	// END Clear Fifos
 }
 
@@ -38,7 +76,6 @@ static int max3107_probe(struct i2c_dev *cp, struct max3107_data *data)
 	// Setup i2c for rx and tx
 	// take the spinlock
 	// initialize the i2c bus using the i2c group
-	//
 	// Disable interrupts
 	// Configure clock source
 	// Initialize the virtual port data to keep track of physical nvram
