@@ -28,7 +28,15 @@ static void __init max3107_register_init(struct max3107_port *s)
 	s->rx_enabled = 1;
 	//I2Cdev.writeBit( device address, register address, bit number, data );
 	
-	// Clear Fifos
+	s->mode2_reg |= MAX3107_WRITE_BIT;
+	//I2Cdev.writeBit( device address, register address, bit number, data );
+	if (loopback) {
+		s->mode2_reg |= MAX3107_MODE2_LOOPBACK_BIT;
+	}
+
+	s->mode2_reg |= MAX3107_MODE2_FIFORST_BIT; // reset FIFOs
+	s->tx_fifo_empty = 1;
+
 	// Read Clear on Reads
 	// Enable Hardware Flow Control
 	// END Clear Fifos
@@ -50,7 +58,6 @@ static int max3107_probe(struct i2c_dev *cp, struct max3107_data *data)
 	// Setup i2c for rx and tx
 	// take the spinlock
 	// initialize the i2c bus using the i2c group
-	//
 	// Disable interrupts
 	// Configure clock source
 	// Initialize the virtual port data to keep track of physical nvram
