@@ -47,17 +47,31 @@ static void __init max3107_register_init(struct max3107_port *s)
 
 	// Configure flow control levels
 	
+	//I2Cdev.writeBit( device address, register address, bit number, data );
+	
 	// Enable Hardware Flow Control
+	
+	//I2Cdev.writeBit( device address, register address, bit number, data );
 	
 	// Configure RX Timeout Register
 	
+	//I2Cdev.writeBit( device address, register address, bit number, data );
+	
 	// Configure LSR interrupt enable
+	
+	//I2Cdev.writeBit( device address, register address, bit number, data );
 	
 	// Clear IRQ Status with a Read (Clear on Read register)
 	
+	//I2Cdev.writeBit( device address, register address, bit number, data );
+	
 	// Configure interrupt enable register
 
+	//I2Cdev.writeBit( device address, register address, bit number, data );
+	
 	// END Clear Fifos
+	s->mode2_reg &= ~MAX3107_MODE2_FIFORST_BIT;
+	//I2Cdev.writeBit( device address, register address, bit number, data );
 }
 
 static int max3107_probe(struct i2c_dev *cp, struct max3107_data *data)
