@@ -47,9 +47,15 @@ static void __init max3107_register_init(struct max3107_port *s)
 
 	// Configure flow control levels
 	
+	//I2Cdev.writeBit( device address, register address, bit number, data );
+	
 	// Enable Hardware Flow Control
 	
+	//I2Cdev.writeBit( device address, register address, bit number, data );
+	
 	// Configure RX Timeout Register
+	
+	//I2Cdev.writeBit( device address, register address, bit number, data );
 	
 	// Configure LSR interrupt enable
 	
