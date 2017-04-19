@@ -2,6 +2,7 @@
 #include <linux/kernel.h> // KERN_ALERT
 #include <linux/init.h> // __init, __exit macros
 #include <linux/device.h>
+
 #include "max3107.h"
 
 // Global variables
@@ -12,8 +13,52 @@ MODULE_PARAM(loopback, "i"); // loopback is an integer type --> "i"
 MODULE_PARAM_DESC(loopback, "Set to 1 to enable loopback (connect rx and tx) on max3107");
 // usage: $ insmod max3107.ko loopback=1
 
-static void __init max3107_register_init(struct max3107_port *s)
+static const struct max3107_group groups [] = {
+	[0] = {
+	.i2cBus = 0,
+	.irqLine = ER_GPIO_00,
+	.irqBitMask = 0x1,
+	.uartDriver = {
+		.owner = THIS_MODULE,
+		.driver_name = "max3107-0",
+		.dev_name = "max3107-0",
+		.major = 207,
+		.minor = 200,
+		.nr = 4,
+	},
+	.portCount = 1;
+	.ports = {
+		[0] = {
+			.name = "Bus 0 Slave 0",
+			.index = 0,
+			.address = 0x2F,
+			.uartclk = 9600,
+			.dtrGPIO = MAX3107_GPIOCFG_GP0OUT_BIT,
+			.dsrGPIO = MAX3107_GPIOCFG_GP1OUT_BIT,
+			.carGPIO = MAX3107_GPIOCFG_GP2OUT_BIT,
+			}
+		}
+	}
+};
+
+static void __init i2cWriteBitsOn()
 {
+
+}
+
+static void __init i2cWriteBitsOn()
+{
+
+}
+
+static void __init max3107_register_init(struct max3107_data *dp)
+{
+	struct i2c_client *client = &dp->i2cClient;
+
+	// Reset FIFOs to get into a known clean state
+	i2cWriteBitsOn( client, MAX3107_MODE2_REG, MAX3107_MODE2_RST_BIT );
+	i2cWriteBitsOff( client, MAX3107_MODE2_REG, MAX3107_MODE2_RST_BIT );
+
 
 	// Configure Baud Rate
 	s->baud = 9600;
