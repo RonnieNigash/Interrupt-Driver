@@ -1,4 +1,4 @@
-#ifndef _MAX3107_H
+#ifndef _MAX3107_H 
 #define _MAX3107_H
 
 /* Custom prototypes and structs */
@@ -6,17 +6,19 @@ struct max3107_group;
 
 struct max3107_data {
 	char* name;
+	int index;
+	unsigned short address;
+	int uartclk;
+	unsigned dtrGPIO, dsrGPIO, carGPIO, rngGPIO;
+
 	struct max3107_group* group;
 	int present;
-	unsigned short address;
-	int index;
 	struct i2c_client i2cClient;
 	int active;
 
 	unsigned dtrGPIO, dsrGPIO, carGPIO, rngGPIO;
 
 	struct uart_port uartPort;
-	int uartclk;
 	unsigned interrupts;
 
 	struct work_struct worker;
@@ -35,8 +37,8 @@ struct max3107_group {
 
 	unsigned portCount;
 
-	struct max3107_data ports[4];
-	struct max3107_data* interruptHistory[4];
+	struct max3107_data ports[1];
+	struct max3107_data* interruptHistory[1];
 	struct work_struct interruptWorker;
 };
 
